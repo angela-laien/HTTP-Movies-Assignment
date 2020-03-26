@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom';
 import axios from "axios";
 
 const initialItem = {
@@ -8,31 +8,44 @@ const initialItem = {
     director: "",
     metascore: "",
     stars: []
-};
+};   
 
 const MovieUpdate = props => {
-
-    const {id} = useParams()
-    const {push}= useHistory()
+ 
+    // get the params and history objects
+    const { id } = useParams();
+    const { push }= useHistory();
 
     const [movie, setMovie] = useState(initialItem);
 
-    const handleChange = e => {
-        e.persist();
-        let value = e.target.value
+    const changeHandler = ev => {
+        ev.persist();
+        let value = ev.target.value
+        if (ev.target.name === 'metascore') {
+            value = parseInt(value, 10);
+        }
+        if (ev.target.name === 'stars') {
+            value = value.split(',');
+        }
 
         setMovie({
-        ...movie,
-        [e.target.name]: value
+            ...movie,
+            [ev.target.name]: value
         });
     };
 
+    // ********** Find the movie and set it to state ********** //
+    // get the id from params
+    // loop through the movies list to find the movie
+    // set the movie to state to pre-populate the form\
+
     useEffect(() => {
-        const movieToUpdate = props.movieList.find(e => `${e.id}` === id )
+        const movieToUpdate = props.movieList.find(e => `${e.id}` === id );
         if (movieToUpdate) {
-            setMovie(movieToUpdate)
+            setMovie(movieToUpdate);
         }
-    }, [props.movieList, id])
+        
+    }, [props.movieList, id]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -47,39 +60,38 @@ const MovieUpdate = props => {
     };
 
     return (
-        <div>
-            <h3>Update Movie</h3>
+        <div className='update-form'>
+            <h1>Update Movie</h1>
             <form onSubmit={handleSubmit}>
-                Title:
-                <input 
-                    type="text"
-                    name="title"
-                    onChange={handleChange}
-                    value={movie.title}
-                />
-                Director:
-                <input
-                    type="text"
-                    name="director"
-                    onChange={handleChange}
-                    value={movie.director}
-                />
-                Metascore:
-                <input
-                    type="number"
-                    name="metascore"
-                    onChange={handleChange}
-                    value={movie.metascore}
-                />
-                Stars: 
-                <input
-                type="text"
-                name="stars"
-                value={movie.stars}
-                onChange={handleChange}
-                />
-            
-                <button>Update Movie</button>
+                <h3>Title:</h3>
+                    <input 
+                        type="text"
+                        name="title"
+                        onChange={changeHandler}
+                        value={movie.title}
+                    />
+                <h3>Director:</h3>
+                    <input
+                        type="text"
+                        name="director"
+                        onChange={changeHandler}
+                        value={movie.director}
+                    />
+                <h3>Metascore:</h3>
+                    <input
+                        type="text"
+                        name="metascore"
+                        onChange={changeHandler}
+                        value={movie.metascore}
+                    />
+                <h3>Stars:</h3>
+                    <input
+                        type="text"
+                        name="stars"
+                        onChange={changeHandler}
+                        value={movie.stars}
+                    />
+                <button >Update Movie</button>
             </form>
         </div>
     );

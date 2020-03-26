@@ -30,7 +30,7 @@ const AddMovie = props => {
         e.preventDefault()
         let value = e.target.value
         if (e.target.name === 'stars') {
-            value = [value]
+            value = value.split(',');
         }
 
         setNewMovie({
@@ -69,8 +69,7 @@ const AddMovie = props => {
                         name="metascore"
                         onChange={handleChange}
                         value={newMovie.metascore}
-                    />
-                    
+                    />  
                 </h3>
                 <h3>
                     Stars: 
@@ -82,7 +81,7 @@ const AddMovie = props => {
                     />
                 </h3>
                 <button type="submit">
-                    Add
+                    Add Movie
                 </button>
             </form>
         </div>
