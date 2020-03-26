@@ -71,7 +71,17 @@ body {
   background-color: lightskyblue;
 }
 
+.add-button {
+  padding: 5px 10px;
+  background-color: pink;
+}
+
 .movie-warning {
   color: red;
+  text-align: center;
+}
+
+.add-form {
+  align-items: center;
   text-align: center;
 }
