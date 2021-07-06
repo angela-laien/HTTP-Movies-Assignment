@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useRouteMatch } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-function Movie({ addToSavedList }) {
+function Movie(props) {
+
   const [movie, setMovie] = useState(null);
   const match = useRouteMatch();
 
@@ -15,8 +16,24 @@ function Movie({ addToSavedList }) {
   };
 
   const saveMovie = () => {
-    addToSavedList(movie);
+    props.addToSavedList(movie);
   };
+
+  const routeToEditForm = e =>{
+    e.preventDefault()
+    props.history.push(`/update-movie/${movie.id}`)
+  }
+
+  const deleteMovie = e => {
+    console.log('delete')
+    axios
+      .delete(`http://localhost:5000/api/movies/${movie.id}`)
+      .then(res => {
+        console.log(res)
+        props.history.push('/')
+      })
+      .catch(err => console.log(err))
+  }
 
   useEffect(() => {
     fetchMovie(match.params.id);
@@ -33,6 +50,16 @@ function Movie({ addToSavedList }) {
       <div className='save-button' onClick={saveMovie}>
         Save
       </div>
+
+      {/* add the onClick handlers */}
+      <div className='update-button' onClick={routeToEditForm}>
+        Edit
+      </div>
+
+      <div className='delete-button' onClick={deleteMovie}>
+        Delete
+      </div>
+      
     </div>
   );
 }
